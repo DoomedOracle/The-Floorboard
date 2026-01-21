@@ -27,20 +27,27 @@ const DISCOVERY_SCHEMA = {
   required: ["discoveries", "sourceSummary"]
 };
 
+const cleanJsonResponse = (text: string) => {
+  return text.replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+};
+
 export const getMusicDiscovery = async (query: string): Promise<ExtractionResponse> => {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: `SEARCH PROTOCOL: "${query}". Find archival matches. Use your search tool to verify against underground music blogs like Sophie's Floorboard or Brooklyn Vegan. Focus on niche, physical-media era releases.`,
+      model: "gemini-3-pro-preview",
+      contents: `SEARCH PROTOCOL: "${query}". Find archival matches. Use your search tool to verify against underground music blogs (Sophie's Floorboard, Brooklyn Vegan, No Echo, Blogspot archives). Focus on niche, physical-media era releases. Strictly avoid "gateway" bands like American Football or Sunny Day Real Estate unless the user specifically asks for them.`,
       config: {
         tools: [{ googleSearch: {} }],
         responseMimeType: "application/json",
-        responseSchema: DISCOVERY_SCHEMA
+        responseSchema: DISCOVERY_SCHEMA,
+        temperature: 0.8
       }
     });
 
-    const data = JSON.parse(response.text);
+    const cleanedText = cleanJsonResponse(response.text || '');
+    const data = JSON.parse(cleanedText);
+    
     const discoveries = data.discoveries.map((d: any) => ({
       ...d,
       vibeReason: 'Protocol match'
@@ -54,61 +61,86 @@ export const getMusicDiscovery = async (query: string): Promise<ExtractionRespon
         .map((c: any) => ({ title: c.web.title, uri: c.web.uri }))
     };
   } catch (err) {
-    console.warn("Global Network Offline. Switching to Local Vibe Scan.");
+    console.warn("Global Network Error. Reverting to local scan.", err);
     const localMatches = searchVibe(query);
     return {
       discoveries: localMatches,
-      sourceSummary: "Retrieved from Local Archival Ledger via Vibe Similarity.",
-      groundingSources: [{ title: "Local Vibe Database", uri: "#" }]
+      sourceSummary: "Retrieved from Local Archival Ledger (Vibe Engine).",
+      groundingSources: [{ title: "Internal Database", uri: "#" }]
     };
   }
 };
 
 const RANDOM_SCENES = [
-  "90s San Diego post-hardcore",
-  "Early 2000s Japanese screamo",
+  "90s San Diego post-hardcore (Gravity Records)",
+  "Early 2000s Japanese screamo (Envy/Heaven in Her Arms)",
   "Late 90s Gainesville Florida emo",
-  "French screamo scene 2000-2010",
-  "Midwest emo obscure 1994-1998",
-  "Richmond Virginia punk archive",
+  "French screamo scene 2000-2010 (Daitro/Aina)",
+  "Midwest emo obscure 1992-1996",
+  "Richmond Virginia punk/hardcore 1998-2005",
   "D.C. Revolution Summer leftovers",
-  "New Jersey basement emo 1999",
+  "New Jersey basement emo 1999-2003",
   "90s Washington State math rock",
-  "Late 90s Philadelphia post-hardcore"
+  "Late 90s Philadelphia skramz",
+  "German screamo/hardcore (Per Koro style)",
+  "Italian emotional hardcore 90s",
+  "Swedish hardcore late 90s",
+  "Brazilian mid-2000s screamo",
+  "Kansas City/Lawrence emo 1994-1998",
+  "90s Houston post-hardcore",
+  "90s Massachusetts emotional hardcore",
+  "Malaysian screamo scene",
+  "Early 2000s UK post-hardcore/emo",
+  "Deep-cut labels like Level Plane or Honey Bear"
+];
+
+const DESCRIPTORS = [
+  "chaotic/mathy", "twinkly/bittersweet", "raw/unproduced", "atmospheric",
+  "angular/dissonant", "spoken-word sections", "violin/cello included",
+  "4-track home recording", "obscure one-off 7-inch", "melodic/aggressive"
 ];
 
 export const getRandomDiscovery = async (): Promise<ExtractionResponse> => {
   try {
     const scene = RANDOM_SCENES[Math.floor(Math.random() * RANDOM_SCENES.length)];
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const descriptor = DESCRIPTORS[Math.floor(Math.random() * DESCRIPTORS.length)];
+    const entropy = Math.random().toString(36).substring(7);
     
-    // Specifically asking for ONE obscure band to make it feel like a single deep pull
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: `PULL RANDOM NODE: Focus on the "${scene}" scene. Find ONE highly obscure, critically respected but forgotten band. Provide a detailed excerpt about their sound.`,
+      model: "gemini-3-pro-preview",
+      contents: `PULL RANDOM NODE [ID: ${entropy}]. SCENE: "${scene}". SOUND: "${descriptor}". 
+      MISSION: Find ONE highly obscure band that most people have forgotten.
+      MANDATORY: 
+      1. Do NOT repeat bands from previous common searches. 
+      2. If you find a band with only 1 release, prioritize it.
+      3. Verify the band exists via search tools (Discogs/Archive.org/Blogs).`,
       config: {
         tools: [{ googleSearch: {} }],
         responseMimeType: "application/json",
-        responseSchema: DISCOVERY_SCHEMA
+        responseSchema: DISCOVERY_SCHEMA,
+        temperature: 1.0
       }
     });
 
-    const data = JSON.parse(response.text);
+    const cleanedText = cleanJsonResponse(response.text || '');
+    const data = JSON.parse(cleanedText);
+    
     return {
       discoveries: data.discoveries.map((d: any) => ({ ...d, vibeReason: 'Protocol match' })),
-      sourceSummary: `Random node extracted from the ${scene} archive sector.`,
+      sourceSummary: `Extracted from Sector: ${scene}. Profile: ${descriptor}.`,
       groundingSources: (response.candidates?.[0]?.groundingMetadata?.groundingChunks || [])
         .filter((c: any) => c.web)
         .map((c: any) => ({ title: c.web.title, uri: c.web.uri }))
     };
   } catch (err) {
-    // Fallback to local random if API fails
+    console.error("Discovery error", err);
     const vibeLib = searchVibe("");
     const item = vibeLib[Math.floor(Math.random() * vibeLib.length)];
     return {
       discoveries: [{ ...item, vibeReason: 'Related via scene' }],
-      sourceSummary: "Random archival entry retrieved from Local Vibe engine (Fallback).",
-      groundingSources: [{ title: "Internal Node Archive", uri: "#" }]
+      sourceSummary: "Random archival entry (Local Fallback).",
+      groundingSources: [{ title: "Internal Archive", uri: "#" }]
     };
   }
 };

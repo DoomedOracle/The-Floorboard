@@ -16,7 +16,7 @@ const RandomPick: React.FC = () => {
       setRandomResult(data);
     } catch (err) {
       console.error(err);
-      setError("Archive node unreachable. Attempting local reboot...");
+      setError("Archive node timed out. Protocol failure.");
     } finally {
       setIsRolling(false);
     }
@@ -33,7 +33,7 @@ const RandomPick: React.FC = () => {
           <div className="absolute inset-0 bg-white/[0.03] translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
           <div className="relative flex flex-col items-center gap-2">
             <span className="text-[11px] font-black text-white uppercase tracking-[1.2em] italic">
-              {isRolling ? 'Decrypting Node...' : 'Access Random Node'}
+              {isRolling ? 'Accessing Ledger...' : 'Access Random Node'}
             </span>
             {!isRolling && <span className="text-[8px] text-gray-800 uppercase tracking-widest font-mono">POOL_SIZE: ENDLESS_ARCHIVE</span>}
           </div>
@@ -43,8 +43,13 @@ const RandomPick: React.FC = () => {
 
       {isRolling && (
         <div className="flex flex-col items-center py-32 animate-pulse space-y-4">
-          <div className="text-3xl font-black retro-font tracking-tighter uppercase text-white/10 italic">Scanning Deep Web Archives...</div>
-          <div className="text-[10px] font-mono text-gray-900 tracking-widest">CONNECTING_TO_SOPHIES_FLOORBOARD_API...</div>
+          <div className="text-3xl font-black retro-font tracking-tighter uppercase text-white/10 italic text-center">
+            Prying Open Obscure Archives...
+          </div>
+          <div className="text-[10px] font-mono text-gray-900 tracking-widest flex items-center gap-2">
+            <span className="w-2 h-2 bg-white/20 rounded-full animate-ping"></span>
+            BYPASSING_BLOGSPOT_FIREWALLS...
+          </div>
           <div className="w-64 h-px bg-white/5 relative overflow-hidden mt-6">
              <div className="absolute inset-0 bg-white/40 animate-[shimmer_0.8s_infinite]"></div>
           </div>
@@ -95,6 +100,14 @@ const RandomPick: React.FC = () => {
                       </span>
                     ))}
                   </div>
+
+                  {randomResult.sourceSummary && (
+                    <div className="mt-8 border border-white/5 px-4 py-2 bg-white/[0.01]">
+                       <p className="text-[8px] text-gray-700 uppercase tracking-[0.2em] font-mono">
+                         {randomResult.sourceSummary}
+                       </p>
+                    </div>
+                  )}
                   
                   {randomResult.groundingSources.length > 0 && (
                      <div className="mt-16 pt-8 border-t border-white/5 w-full flex justify-center">

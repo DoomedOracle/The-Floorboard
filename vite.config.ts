@@ -4,9 +4,13 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: './', // Ensures assets are loaded relative to the index.html location
+  base: './',
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+  },
+  define: {
+    // Shims process.env to prevent "process is not defined" errors in the browser
+    'process.env': {}
   }
 });
