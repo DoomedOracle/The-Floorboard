@@ -1,25 +1,16 @@
 
-export interface SceneEntry {
-  id: string;
-  artist: string;
-  labels: string[];
-  era: string;
-  geography: string;
-  coMentions: string[]; 
-}
-
-export interface StylisticMatch {
+export interface DiscoveryItem {
   id: string;
   artist: string;
   releaseTitle: string;
+  labels: string[];
+  era: string;
+  geography: string;
   descriptiveKeywords: string[];
-  vibeContext: string; 
-  reasoning: string; 
 }
 
 export interface ExtractionResponse {
-  sceneLayer: SceneEntry[];
-  soundsLikeLayer: StylisticMatch[];
+  discoveries: DiscoveryItem[];
   sourceSummary: string;
   groundingSources: Array<{
     title: string;

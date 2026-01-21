@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: './', // Vital for GitHub Pages subfolders
+  base: './', // Ensures assets are loaded relative to the index.html location
   build: {
     outDir: 'dist',
     emptyOutDir: true,

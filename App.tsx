@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
 import Layout from './components/Layout';
 import SearchBox from './components/SearchBox';
 import AlbumDisplay from './components/AlbumDisplay';
+import RandomPick from './components/RandomPick';
 import { getMusicDiscovery } from './services/discoveryService';
 import { ExtractionResponse } from './types';
 
@@ -28,6 +28,8 @@ const App: React.FC = () => {
   return (
     <Layout>
       <div className="space-y-12">
+        {!results && !loading && <RandomPick />}
+
         <section>
           <SearchBox onSearch={handleSearch} isLoading={loading} />
         </section>
@@ -40,7 +42,7 @@ const App: React.FC = () => {
 
         <section className="pb-32">
           {!results && !loading && (
-            <div className="flex flex-col items-center justify-center py-48">
+            <div className="flex flex-col items-center justify-center py-24">
               <div className="w-px h-16 bg-white/5 mb-8"></div>
               <p className="text-[10px] uppercase tracking-[1em] text-white/10 font-black italic">
                 Ready to explore the scene archives...

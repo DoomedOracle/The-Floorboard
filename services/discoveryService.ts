@@ -2,85 +2,84 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { ExtractionResponse } from '../types';
 
+const ARCHIVE_PROMPT_BASE = `Act as a senior music archivist for underground scenes (Emo, Screamo, Hardcore, Post-Punk). 
+Focus on specific archives like Sophie's Floorboard, Brooklyn Vegan, Washed Up Emo, and No Echo.
+For every release you find, provide ONLY raw metadata:
+1. Artist and Release Title.
+2. Labels, Era (Year), and Geography (City/State).
+3. Short, descriptive tags.
+DO NOT provide descriptions, reasoning, or vibe contexts. Keep it archival and objective.`;
+
+const DISCOVERY_ITEM_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    id: { type: Type.STRING },
+    artist: { type: Type.STRING },
+    releaseTitle: { type: Type.STRING },
+    labels: { type: Type.ARRAY, items: { type: Type.STRING } },
+    era: { type: Type.STRING },
+    geography: { type: Type.STRING },
+    descriptiveKeywords: { type: Type.ARRAY, items: { type: Type.STRING } }
+  },
+  required: ["id", "artist", "releaseTitle", "labels", "era", "geography", "descriptiveKeywords"]
+};
+
+const RESPONSE_SCHEMA = {
+  type: Type.OBJECT,
+  properties: {
+    discoveries: {
+      type: Type.ARRAY,
+      items: DISCOVERY_ITEM_SCHEMA
+    },
+    sourceSummary: { type: Type.STRING }
+  },
+  required: ["discoveries", "sourceSummary"]
+};
+
 export const getMusicDiscovery = async (query: string): Promise<ExtractionResponse> => {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
-  // Get user location for better grounding if available
-  let locationText = "unknown location";
-  try {
-    const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
-      if (!navigator.geolocation) {
-        reject(new Error("Geolocation not supported"));
-      } else {
-        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
-      }
-    });
-    locationText = `${pos.coords.latitude}, ${pos.coords.longitude}`;
-  } catch (e) {
-    console.log("Location not available for grounding, proceeding with general search.");
-  }
-
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
-    contents: `Discover music related to: "${query}". 
-    Focus on underground scenes, archives (like Sophie's Floorboard, Brooklyn Vegan, No Echo, Washed Up Emo), and stylistic matches. 
-    Context: User is currently near ${locationText}.
-    Provide a detailed, structured response in JSON format.`,
+    contents: `${ARCHIVE_PROMPT_BASE} Find releases related to: "${query}". 
+    Return a minimal grid of metadata.`,
     config: {
       tools: [{ googleSearch: {} }],
       responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          sceneLayer: {
-            type: Type.ARRAY,
-            items: {
-              type: Type.OBJECT,
-              properties: {
-                id: { type: Type.STRING },
-                artist: { type: Type.STRING },
-                labels: { type: Type.ARRAY, items: { type: Type.STRING } },
-                era: { type: Type.STRING },
-                geography: { type: Type.STRING },
-                coMentions: { type: Type.ARRAY, items: { type: Type.STRING } }
-              },
-              required: ["id", "artist", "labels", "era", "geography", "coMentions"]
-            }
-          },
-          soundsLikeLayer: {
-            type: Type.ARRAY,
-            items: {
-              type: Type.OBJECT,
-              properties: {
-                id: { type: Type.STRING },
-                artist: { type: Type.STRING },
-                releaseTitle: { type: Type.STRING },
-                descriptiveKeywords: { type: Type.ARRAY, items: { type: Type.STRING } },
-                vibeContext: { type: Type.STRING },
-                reasoning: { type: Type.STRING }
-              },
-              required: ["id", "artist", "releaseTitle", "descriptiveKeywords", "vibeContext", "reasoning"]
-            }
-          },
-          sourceSummary: { type: Type.STRING }
-        },
-        required: ["sceneLayer", "soundsLikeLayer", "sourceSummary"]
-      }
+      responseSchema: RESPONSE_SCHEMA
     }
   });
 
-  const rawText = response.text;
-  if (!rawText) {
-    throw new Error("No response content from discovery engine.");
-  }
+  return parseGeminiResponse(response);
+};
 
+export const getRandomDiscovery = async (): Promise<ExtractionResponse> => {
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  
+  const response = await ai.models.generateContent({
+    model: "gemini-3-flash-preview",
+    contents: `${ARCHIVE_PROMPT_BASE} Pull one random release from the archives. 
+    Focus on something rare or obscure.`,
+    config: {
+      tools: [{ googleSearch: {} }],
+      responseMimeType: "application/json",
+      responseSchema: RESPONSE_SCHEMA
+    }
+  });
+
+  return parseGeminiResponse(response);
+};
+
+function parseGeminiResponse(response: any): ExtractionResponse {
+  const rawText = response.text;
+  if (!rawText) throw new Error("The archives returned an empty signal.");
+  
   const parsed = JSON.parse(rawText);
   
-  // Extract URLs from grounding metadata
   const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
   const groundingSources = groundingChunks
-    .filter(chunk => chunk.web)
-    .map(chunk => ({
+    .filter((chunk: any) => chunk.web)
+    .map((chunk: any) => ({
       title: chunk.web?.title || "Archive Source",
       uri: chunk.web?.uri || "#"
     }));
@@ -89,4 +88,4 @@ export const getMusicDiscovery = async (query: string): Promise<ExtractionRespon
     ...parsed,
     groundingSources: groundingSources.slice(0, 5)
   };
-};
+}
