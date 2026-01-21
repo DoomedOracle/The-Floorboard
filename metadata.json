@@ -1,6 +1,7 @@
-
 {
   "requestFramePermissions": [
     "geolocation"
-  ]
+  ],
+  "name": "The Floorboard: Scene Archive Analyzer",
+  "description": ""
 }

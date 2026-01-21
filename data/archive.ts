@@ -6,12 +6,7 @@ export const archiveData = [
     "releaseTitle": "American Football (LP1)",
     "labels": ["Polyvinyl"],
     "era": "1999",
-    "geography": "Urbana, Illinois",
-    "coMentions": ["Cap'n Jazz", "Joan of Arc", "The Promise Ring"],
-    "descriptiveKeywords": ["twinkly", "math-rock", "suburban", "nostalgic"],
-    "vibeContext": "A masterclass in suburban melancholy. The guitars interlock like clockwork, perfectly capturing the feeling of leaving home for the last time.",
-    "sourceSlug": "sophies-floorboard",
-    "reasoning": "This defines the 'midwest' sound that thousands of bands would later attempt to replicate."
+    "geography": "Urbana, Illinois"
   },
   {
     "id": "2",
@@ -19,12 +14,7 @@ export const archiveData = [
     "releaseTitle": "The Power of Failing",
     "labels": ["Crank!", "Interscope"],
     "era": "1997",
-    "geography": "Austin, Texas",
-    "coMentions": ["Sunny Day Real Estate", "Christie Front Drive", "The Gloria Record"],
-    "descriptiveKeywords": ["raw", "dynamic", "crescendo", "desperate"],
-    "vibeContext": "Few bands captured the quiet-loud dynamic with such visceral honesty. Chris Simpson's vocals sound like they're breaking in real-time.",
-    "sourceSlug": "washed-up-emo",
-    "reasoning": "A cornerstone of the 90s second-wave emo movement, essential for understanding the scene's emotional depth."
+    "geography": "Austin, Texas"
   },
   {
     "id": "3",
@@ -32,12 +22,7 @@ export const archiveData = [
     "releaseTitle": "We Are the Romans",
     "labels": ["Hydra Head"],
     "era": "1999",
-    "geography": "Tacoma, Washington",
-    "coMentions": ["The Dillinger Escape Plan", "Converge", "Cave In"],
-    "descriptiveKeywords": ["chaotic", "mathcore", "precise", "heavy"],
-    "vibeContext": "A record that redefined what 'heavy' could mean. It's calculated, surgical, and utterly punishing in its complexity.",
-    "sourceSlug": "lambgoat",
-    "reasoning": "The definitive mathcore document. If you're looking for precision in chaos, this is the archival peak."
+    "geography": "Tacoma, Washington"
   },
   {
     "id": "4",
@@ -45,12 +30,7 @@ export const archiveData = [
     "releaseTitle": "Collected",
     "labels": ["Mountain", "Secret Voice"],
     "era": "1997-2000",
-    "geography": "New York City, NY",
-    "coMentions": ["Orchid", "Hot Cross", "City of Caterpillar"],
-    "descriptiveKeywords": ["screamo", "chaotic", "melodic", "raw"],
-    "vibeContext": "The blueprint for NYC screamo. It balances haunting melodies with absolute vocal destruction in a way few have managed since.",
-    "sourceSlug": "sophies-floorboard",
-    "reasoning": "Essential for exploring the lineage of the 90s screamo scene."
+    "geography": "New York City, NY"
   },
   {
     "id": "5",
@@ -58,11 +38,126 @@ export const archiveData = [
     "releaseTitle": "Only One Mode",
     "labels": ["Flatspot", "Last Ride"],
     "era": "2024",
-    "geography": "Sydney, Australia",
-    "coMentions": ["Scowl", "Zulu", "Pain of Truth"],
-    "descriptiveKeywords": ["hardcore", "groove", "modern", "heavy"],
-    "vibeContext": "Hardcore in its purest, most energetic form. It's a modern standard for the genre, proving the scene's vitality in the current era.",
-    "sourceSlug": "brooklyn-vegan",
-    "reasoning": "Pulled from 2024 year-end highlights as a primary modern discovery."
+    "geography": "Sydney, Australia"
+  },
+  {
+    "id": "6",
+    "artist": "Cap'n Jazz",
+    "releaseTitle": "Burritos, Inspiration Point...",
+    "labels": ["Jade Tree"],
+    "era": "1995",
+    "geography": "Chicago, IL"
+  },
+  {
+    "id": "7",
+    "artist": "City of Caterpillar",
+    "releaseTitle": "S/T",
+    "labels": ["Level Plane"],
+    "era": "2002",
+    "geography": "Richmond, VA"
+  },
+  {
+    "id": "8",
+    "artist": "Gospel",
+    "releaseTitle": "The Moon Is a Dead World",
+    "labels": ["Level Plane"],
+    "era": "2005",
+    "geography": "Brooklyn, NY"
+  },
+  {
+    "id": "9",
+    "artist": "Pg.99",
+    "releaseTitle": "Document #8",
+    "labels": ["Robotic Empire"],
+    "era": "2001",
+    "geography": "Sterling, VA"
+  },
+  {
+    "id": "10",
+    "artist": "Orchid",
+    "releaseTitle": "Chaos Is Me",
+    "labels": ["Ebullition"],
+    "era": "1999",
+    "geography": "Amherst, MA"
+  },
+  {
+    "id": "11",
+    "artist": "The Promise Ring",
+    "releaseTitle": "Nothing Feels Good",
+    "labels": ["Jade Tree"],
+    "era": "1997",
+    "geography": "Milwaukee, WI"
+  },
+  {
+    "id": "12",
+    "artist": "Indian Summer",
+    "releaseTitle": "Science 1994",
+    "labels": ["Reconstitution"],
+    "era": "1994",
+    "geography": "Oakland, CA"
+  },
+  {
+    "id": "13",
+    "artist": "Converge",
+    "releaseTitle": "Jane Doe",
+    "labels": ["Equal Vision"],
+    "era": "2001",
+    "geography": "Salem, MA"
+  },
+  {
+    "id": "14",
+    "artist": "Unbroken",
+    "releaseTitle": "Life. Love. Regret.",
+    "labels": ["New Age"],
+    "era": "1994",
+    "geography": "San Diego, CA"
+  },
+  {
+    "id": "15",
+    "artist": "Braid",
+    "releaseTitle": "Frame & Canvas",
+    "labels": ["Polyvinyl"],
+    "era": "1998",
+    "geography": "Champaign, IL"
+  },
+  {
+    "id": "16",
+    "artist": "Modern Baseball",
+    "releaseTitle": "Sports",
+    "labels": ["Lame-O"],
+    "era": "2012",
+    "geography": "Philadelphia, PA"
+  },
+  {
+    "id": "17",
+    "artist": "Basement",
+    "releaseTitle": "Colourmeinkindness",
+    "labels": ["Run For Cover"],
+    "era": "2012",
+    "geography": "Ipswich, UK"
+  },
+  {
+    "id": "18",
+    "artist": "Ceremony",
+    "releaseTitle": "Rohnert Park",
+    "labels": ["Bridge Nine"],
+    "era": "2010",
+    "geography": "Rohnert Park, CA"
+  },
+  {
+    "id": "19",
+    "artist": "Touché Amoré",
+    "releaseTitle": "Stage Four",
+    "labels": ["Epitaph"],
+    "era": "2016",
+    "geography": "Los Angeles, CA"
+  },
+  {
+    "id": "20",
+    "artist": "Sunny Day Real Estate",
+    "releaseTitle": "Diary",
+    "labels": ["Sub Pop"],
+    "era": "1994",
+    "geography": "Seattle, WA"
   }
 ];

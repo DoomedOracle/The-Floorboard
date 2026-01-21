@@ -6,6 +6,9 @@ export interface DiscoveryItem {
   labels: string[];
   era: string;
   geography: string;
+  excerpt?: string;
+  vibeScore?: number;
+  vibeReason?: 'Sounds like' | 'Related via scene' | 'Protocol match';
 }
 
 export interface ExtractionResponse {
