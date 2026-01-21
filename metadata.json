@@ -1,5 +1,6 @@
+
 {
-  "name": "The Floorboard: Scene Archive Analyzer",
-  "description": "A metadata extraction tool for the Emo, Hardcore, and Punk scene archives. Strictly focuses on archival data from Sophie's Floorboard, Brooklyn Vegan, No Echo, and more.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [
+    "geolocation"
+  ]
 }
