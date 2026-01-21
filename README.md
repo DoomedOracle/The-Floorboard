@@ -1,40 +1,20 @@
-# The Floorboard
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-> _A work-in-progress music discovery tool for emo, hardcore, pop-punk, and metalcore_
+# Run and deploy your AI Studio app
 
-Music Vibe Discovery is designed to simulate the organic, serendipitous album discovery that has largely been lost in the streaming era. While we can never go back to the analogue days of digging through zines, blogs, and record stores, this tool leverages technology in a way that gives us autonomy — letting you explore music on your own terms, without being beholden to endless monetization or attention-grabbing algorithms.
+This contains everything you need to run your app locally.
 
----
+View your app in AI Studio: https://ai.studio/apps/drive/1XB6UyWH8Lkw_f9TlRKCRlsQRrGVhY0yw
 
-## Features
+## Run Locally
 
-- Scene-based discovery: Find bands by era, geography, and scene co-occurrence.
-- Two-layer recommendations: “Related via scene” + “Sounds like” suggestions.
-- Random album / band per day: For serendipitous discovery.
-- Dynamic, rotating prompts: Encourages exploration without explaining itself.
-- Lightweight, browser-based: Works on desktop and mobile.
+**Prerequisites:**  Node.js
 
----
 
-## Origins, Inspiration & Status
-
-This project grew out of my own experiences discovering music as a teenager and beyond.  
-I spent hours digging through sites like **Sophie’s Floorboard**, **Brooklyn Vegan**, **Kingdom Leaks**, and music magazines like Rocksound and Kerrang! to find bands that weren’t mainstream, learning about the scenes they came from and the stories behind their releases.  
-
-Those albums, music reviews, and random blog posts guided my taste in emo, post-hardcore, hardcore, pop-punk, and metalcore — and I wanted to recreate that feeling for others:  
-
-- The thrill of a band you’d never heard of showing up in a blog post.  
-- Following a scene across cities, labels, and eras.  
-- Discovering music through memory, description, and context rather than charts or algorithms.  
-
-**The Floorboard is a work in progress.** Features, prompts, and source coverage are experimental, and may change frequently. Your feedback and contributions are welcome to help refine the experience.
-
----
-
-## Installation & Local Testing
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/music-vibe-discovery.git
-cd music-vibe-discovery
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
