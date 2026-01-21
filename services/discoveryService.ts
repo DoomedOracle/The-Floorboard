@@ -2,13 +2,13 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { ExtractionResponse } from '../types';
 
-const ARCHIVE_PROMPT_BASE = `Act as a senior music archivist for underground scenes (Emo, Screamo, Hardcore, Post-Punk). 
+const ARCHIVE_PROMPT_BASE = `Act as a cold, objective music archivist for underground scenes (Emo, Screamo, Hardcore, Post-Punk). 
 Focus on specific archives like Sophie's Floorboard, Brooklyn Vegan, Washed Up Emo, and No Echo.
-For every release you find, provide ONLY raw metadata:
+For every release you find, provide ONLY the following raw metadata:
 1. Artist and Release Title.
 2. Labels, Era (Year), and Geography (City/State).
-3. Short, descriptive tags.
-DO NOT provide descriptions, reasoning, or vibe contexts. Keep it archival and objective.`;
+DO NOT provide descriptions, reasoning, vibe contexts, or genre tags. 
+Keep the output purely factual and archival. Do not tip your hand on what the music sounds like.`;
 
 const DISCOVERY_ITEM_SCHEMA = {
   type: Type.OBJECT,
@@ -18,10 +18,9 @@ const DISCOVERY_ITEM_SCHEMA = {
     releaseTitle: { type: Type.STRING },
     labels: { type: Type.ARRAY, items: { type: Type.STRING } },
     era: { type: Type.STRING },
-    geography: { type: Type.STRING },
-    descriptiveKeywords: { type: Type.ARRAY, items: { type: Type.STRING } }
+    geography: { type: Type.STRING }
   },
-  required: ["id", "artist", "releaseTitle", "labels", "era", "geography", "descriptiveKeywords"]
+  required: ["id", "artist", "releaseTitle", "labels", "era", "geography"]
 };
 
 const RESPONSE_SCHEMA = {
@@ -41,8 +40,7 @@ export const getMusicDiscovery = async (query: string): Promise<ExtractionRespon
   
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
-    contents: `${ARCHIVE_PROMPT_BASE} Find releases related to: "${query}". 
-    Return a minimal grid of metadata.`,
+    contents: `${ARCHIVE_PROMPT_BASE} Locate releases associated with: "${query}".`,
     config: {
       tools: [{ googleSearch: {} }],
       responseMimeType: "application/json",
@@ -58,8 +56,7 @@ export const getRandomDiscovery = async (): Promise<ExtractionResponse> => {
   
   const response = await ai.models.generateContent({
     model: "gemini-3-flash-preview",
-    contents: `${ARCHIVE_PROMPT_BASE} Pull one random release from the archives. 
-    Focus on something rare or obscure.`,
+    contents: `${ARCHIVE_PROMPT_BASE} Randomly select one obscure release from the archives.`,
     config: {
       tools: [{ googleSearch: {} }],
       responseMimeType: "application/json",

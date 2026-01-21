@@ -6,7 +6,6 @@ export interface DiscoveryItem {
   labels: string[];
   era: string;
   geography: string;
-  descriptiveKeywords: string[];
 }
 
 export interface ExtractionResponse {
